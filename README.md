@@ -6,7 +6,7 @@
 
 公开文件采用 [MIT License](LICENSE)，机械臂私有实现和本地用户数据不随仓库分发。
 
-新版小模型已真实训练并接入网页，支持 GRASP、PLACE、MOVE、STOP、RUN_TASK、CLARIFY、UNSUPPORTED，不识别方向。新增目标、别名和基于已有技能的任务不需要训练。模型、数据、权重和实验记录见 [llm/README.md](llm/README.md)。Qwen 本地文件保留，网页不再接入。
+新版小模型已真实训练并接入网页，支持 GRASP、PLACE、MOVE、STOP、RUN_TASK、CLARIFY、UNSUPPORTED，不识别方向。新增目标、别名和基于已有技能的任务不需要训练。模型、数据、权重和实验记录见 [llm/README.md](llm/README.md)。
 机械臂代码集中在 `robot/`，启动入口集中在 `launch/`。
 
 ## 公开范围与运行条件
@@ -21,7 +21,6 @@
 | `backend/simulation.py` | 仿真调度、相机与深度点选、动作执行及物理结果验证 |
 | `launch/demo.py`、`launch/grasp.py` | 私有机械臂演示入口 |
 | `frontend/tools/render_scene.py` | 依赖私有场景与控制器的预览资源生成工具 |
-| `qwen/`、`launch/language_grasp.py`、`launch/ollama.sh` | 保留的旧 Qwen 机械臂执行链、运行库与权重 |
 
 本地虚拟环境、机械臂描述和几何资源、`backend/data/` 中的用户数据库也已忽略。`llm/checkpoints/`、`llm/data/` 和 `llm/experiments/` 保留在公开范围内；这里的语言模型权重与机械臂模型资源不同。
 
@@ -57,16 +56,10 @@ robot_grasping/
 │   ├── spatial_scene.py       # 布局生成和场景快照
 │   └── scene_reasoning.py     # 颜色、空间关系与唯一目标筛选
 ├── launch/
+│   ├── web.py                 # 网页与后端统一入口，依赖私有执行模块
 │   ├── demo.py                # 启动场景演示
 │   ├── grasp.py               # 启动指定颜色抓取
-│   ├── trained_language_grasp.py  # 新小模型 + 用户登记库的命令行入口
-│   ├── language_grasp.py      # 启动 Qwen 抓取
-│   └── ollama.sh              # 启动本地 Ollama 服务
-├── qwen/
-│   ├── grasp.py               # Qwen 提示词、HTTP 接口和抓取流程
-│   ├── ollama.sh              # 本地 Ollama 启动脚本
-│   ├── runtime/               # Ollama 可执行文件与推理库
-│   └── models/                # 已下载的 Qwen3 4B 权重及清单
+│   └── trained_language_grasp.py  # 自训小模型 + 用户登记库的命令行入口
 ├── llm/
 │   ├── model.py               # 合并后的网络、文本编码和推理代码
 │   ├── checkpoints/intent_v2.pt  # 当前七分类权重、固定词表和阈值，v1 保留
@@ -74,11 +67,11 @@ robot_grasping/
 │   ├── experiments/intent_v2/ # 当前训练曲线、实验配置和真实评估，v1 保留
 │   ├── train.py               # 真实训练入口
 │   ├── evaluate.py            # 独立评估入口
-│   ├── schema.py              # 固定动作协议和保留的旧命令行协议
+│   ├── schema.py              # 固定动作意图协议与输入标准化
 │   └── requirements.txt       # 自训模型的 PyTorch 依赖
 ├── tests/                     # 无需训练数据的运行回归检查
 ├── requirements.txt           # PyBullet、NumPy 依赖
-├── .venv/                     # 机械臂和 Qwen 接口环境
+├── .venv/                     # 本地机械臂仿真环境
 └── .venv_train/               # 已安装 PyTorch 的小模型推理环境
 ```
 
@@ -108,7 +101,7 @@ robot_grasping/
   "帮我抓取零件A" --headless
 ```
 
-网络约 184 万参数，默认 CPU 推理，不需要 Ollama。词表、标签和网络配置包含在 `llm/checkpoints/intent_v2.pt` 中；v1 保留用于比较。后端替换数据库名称后，按目标和现有动作词提取唯一命令，只把有效片段交给真实模型，不审核闲话词语或枚举开场白。例如“我在打游戏，我想抓取零件A”只识别“抓取<OBJ>”。命令行入口支持 `--parse-only`、`--database`、`--headless`、`--device` 和 `--checkpoint`。它启动独立仿真，不与正在运行的网页共享物理状态。
+网络约 184 万参数，默认使用 CPU 推理。词表、标签和网络配置包含在 `llm/checkpoints/intent_v2.pt` 中；v1 保留用于比较。后端替换数据库名称后，按目标和现有动作词提取唯一命令，只把有效片段交给真实模型，不审核闲话词语或枚举开场白。例如“我在打游戏，我想抓取零件A”只识别“抓取<OBJ>”。命令行入口支持 `--parse-only`、`--database`、`--headless`、`--device` 和 `--checkpoint`。它启动独立仿真，不与正在运行的网页共享物理状态。
 
 各类意图的含义、自然语言示例及执行条件见技术文档中的[模型识别能力表](PROJECT_DESIGN.md#模型识别能力)。
 
@@ -244,29 +237,9 @@ Content-Type: application/json
 
 当前清除记忆逻辑还会使用执行服务的 `lock`（可重入锁）、`active_job`、`control_pending` 和 `jobs` 字典；兼容模块需要提供这些成员。实现错误通过 `backend.RequestError(message, status)` 交给 HTTP 层返回。若选择自行实现独立 HTTP 执行后端，则按上述 HTTP 协议连接前端，无需采用这个 Python 类。
 
-## 保留的旧 Qwen 命令行（仅本地）
-
-本节入口和依赖已忽略，不随公开仓库分发。
-
-在第一个终端启动服务并保持运行：
-
-```bash
-bash launch/ollama.sh serve
-```
-
-在第二个终端运行：
-
-```bash
-.venv/bin/python launch/language_grasp.py \
-  "抓取红色方块左边的方块" --layout blue,red,green --seed 42
-```
-
-Qwen 的运行环境、权重和接口实现均位于 `qwen/`，统一从 `launch/` 启动。服务仅监听 `127.0.0.1:11434`，已有权重的推理不需要联网。在服务终端按 Ctrl+C 停止服务。
-
 ## 运行选项与检查
 
 - 新网页使用固定场景和用户登记的名称，不按颜色或方向预测目标。
-- 旧 Qwen 命令行保留原有布局、颜色和空间关系行为，不参与新网页流程。
 - 未知目标、多目标、否定请求、过期解析凭据和无效技能不会发起执行；模型仍可能误解新表达。
 - 成功判据为目标抬升至少 15 cm，并保持双指接触 3 秒；抓取依靠物理接触与摩擦。
 

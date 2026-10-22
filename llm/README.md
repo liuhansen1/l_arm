@@ -9,7 +9,7 @@
 ```text
 llm/
 ├── model.py                    # 现有 Encoder 的新动作分类实现、Tokenizer 和推理
-├── schema.py                   # 新动作协议；保留旧 Qwen 入口需要的独立旧协议
+├── schema.py                   # 固定动作意图协议与输入标准化
 ├── dataset.py                  # 可检查的句式和数据生成器
 ├── train.py                    # 真实训练、验证选模与阈值选择
 ├── evaluate.py                 # 独立测试集评估
@@ -34,7 +34,7 @@ llm/
     └── random_initialization/  # 未采用的随机初始化候选及其真实数据和结果
 ```
 
-旧的 `best.pt` 和 `inference_config.json` 已删除。Qwen 目录和用户登记数据库保留；网页仅调用新版小模型。
+旧的 `best.pt` 和 `inference_config.json` 已删除。用户登记数据库保留，网页调用当前自训小模型。
 
 ## 真实训练记录
 

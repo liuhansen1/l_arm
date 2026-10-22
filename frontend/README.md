@@ -79,7 +79,7 @@ MOVE 的 XYZ 表示夹爪参考点的绝对世界坐标；物体库中的普通�
 - 已实现：实时 PyBullet 相机、同帧深度点选、坐标编辑、真实抓取验证、进度和结果、停止与重置。
 - 已实现：物体名称、别名、坐标和技能 ID 的 SQLite 存储，以及任务配置的保存和编辑。
 - 已实现：四层 Transformer 七分类推理、动态名称匹配、一次性解析凭据、GRASP / MOVE / PLACE / WAIT 连续任务执行。
-- 旧小模型已替换；训练脚本、数据、权重和真实实验结果见 [../llm/README.md](../llm/README.md)。Qwen 文件保留，但前端不再提供切换入口。
+- 旧小模型已替换；训练脚本、数据、权重和真实实验结果见 [../llm/README.md](../llm/README.md)。
 - 原有两参数 `grasp_cube()` 调用继续可用。
 
 数据库默认位于 `backend/data/registry.sqlite3`，首次启动物体、放置点和任务库均为空；之后只读取用户保存的内容。新增放置点表不会清空旧数据。删除所有登记后重新启动仍为空，重置物理场景也不会自动导入目标。可用 `--database /path/to/registry.sqlite3` 指定位置。SQLite 物体 ID 与 PyBullet 临时 body ID 分开。
