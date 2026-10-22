@@ -1,0 +1,505 @@
+{
+  "samples": 279,
+  "accuracy": 0.953405017921147,
+  "accepted_coverage": 0.8673835125448028,
+  "accepted_accuracy": 0.9793388429752066,
+  "macro_f1": 0.9529155987061915,
+  "per_class": {
+    "GRASP": {
+      "precision": 0.8888888888888888,
+      "recall": 0.8,
+      "f1": 0.8421052631578948,
+      "support": 40
+    },
+    "PLACE": {
+      "precision": 0.8888888888888888,
+      "recall": 1.0,
+      "f1": 0.9411764705882353,
+      "support": 40
+    },
+    "MOVE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 40
+    },
+    "STOP": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 40
+    },
+    "RUN_TASK": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 39
+    },
+    "CLARIFY": {
+      "precision": 0.9069767441860465,
+      "recall": 0.975,
+      "f1": 0.9397590361445783,
+      "support": 40
+    },
+    "UNSUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1": 0.9473684210526316,
+      "support": 40
+    }
+  },
+  "labels": [
+    "GRASP",
+    "PLACE",
+    "MOVE",
+    "STOP",
+    "RUN_TASK",
+    "CLARIFY",
+    "UNSUPPORTED"
+  ],
+  "confusion_matrix": [
+    [
+      32,
+      4,
+      0,
+      0,
+      0,
+      4,
+      0
+    ],
+    [
+      0,
+      40,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      40,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      40,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      39,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      0,
+      39,
+      0
+    ],
+    [
+      4,
+      0,
+      0,
+      0,
+      0,
+      0,
+      36
+    ]
+  ],
+  "errors": [
+    {
+      "text": "把<OBJ>拿一下",
+      "expected": "GRASP",
+      "action": "CLARIFY",
+      "confidence": 0.870150625705719,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我把<OBJ>拿一下。",
+      "expected": "GRASP",
+      "action": "PLACE",
+      "confidence": 0.6080071926116943,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，把<OBJ>拿一下",
+      "expected": "GRASP",
+      "action": "PLACE",
+      "confidence": 0.9926256537437439,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "我想了想，把<OBJ>拿一下",
+      "expected": "GRASP",
+      "action": "PLACE",
+      "confidence": 0.5205891728401184,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "把<OBJ>抓一下",
+      "expected": "GRASP",
+      "action": "GRASP",
+      "confidence": 0.7573642134666443,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，把<OBJ>抓一下",
+      "expected": "GRASP",
+      "action": "GRASP",
+      "confidence": 0.6931304335594177,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，将这个<OBJ>拿起来",
+      "expected": "GRASP",
+      "action": "CLARIFY",
+      "confidence": 0.8776633739471436,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "抓取一下<OBJ>",
+      "expected": "GRASP",
+      "action": "GRASP",
+      "confidence": 0.9306895136833191,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "拿起这个<OBJ>",
+      "expected": "GRASP",
+      "action": "CLARIFY",
+      "confidence": 0.9911800026893616,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，拿起这个<OBJ>",
+      "expected": "GRASP",
+      "action": "CLARIFY",
+      "confidence": 0.8487468957901001,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，我想要抓起<OBJ>",
+      "expected": "GRASP",
+      "action": "GRASP",
+      "confidence": 0.7778974175453186,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我能帮我把<OBJ>拿起来吗。",
+      "expected": "GRASP",
+      "action": "GRASP",
+      "confidence": 0.7857106328010559,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，能帮我把<OBJ>拿起来吗",
+      "expected": "GRASP",
+      "action": "PLACE",
+      "confidence": 0.8780114054679871,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，把<OBJ>抓起来就行",
+      "expected": "GRASP",
+      "action": "GRASP",
+      "confidence": 0.752082109451294,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我能帮我移动到<OBJ>吗。",
+      "expected": "MOVE",
+      "action": "MOVE",
+      "confidence": 0.8955988883972168,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我我需要把末端移到<OBJ>。",
+      "expected": "MOVE",
+      "action": "MOVE",
+      "confidence": 0.8060223460197449,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我机械臂先停一下。",
+      "expected": "STOP",
+      "action": "STOP",
+      "confidence": 0.874504804611206,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，机械臂先停一下",
+      "expected": "STOP",
+      "action": "STOP",
+      "confidence": 0.8571030497550964,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "赶快停下",
+      "expected": "STOP",
+      "action": "STOP",
+      "confidence": 0.9999731779098511,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "不用放下<OBJ>",
+      "expected": "CLARIFY",
+      "action": "CLARIFY",
+      "confidence": 0.8609138131141663,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我不用放下<OBJ>。",
+      "expected": "CLARIFY",
+      "action": "PLACE",
+      "confidence": 0.8771248459815979,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，不用放下<OBJ>",
+      "expected": "CLARIFY",
+      "action": "CLARIFY",
+      "confidence": 0.8665465116500854,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "我想了想，不用放下<OBJ>",
+      "expected": "CLARIFY",
+      "action": "CLARIFY",
+      "confidence": 0.7679944634437561,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "不要停下来",
+      "expected": "CLARIFY",
+      "action": "CLARIFY",
+      "confidence": 0.6266562342643738,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "我只是想了解<TASK>",
+      "expected": "CLARIFY",
+      "action": "CLARIFY",
+      "confidence": 0.8549401760101318,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "给<OBJ>喷漆",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9965413212776184,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "将<OBJ>焊接起来",
+      "expected": "UNSUPPORTED",
+      "action": "GRASP",
+      "confidence": 0.999609649181366,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我将<OBJ>焊接起来。",
+      "expected": "UNSUPPORTED",
+      "action": "GRASP",
+      "confidence": 0.9801033139228821,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，将<OBJ>焊接起来",
+      "expected": "UNSUPPORTED",
+      "action": "GRASP",
+      "confidence": 0.5966916680335999,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "我想了想，将<OBJ>焊接起来",
+      "expected": "UNSUPPORTED",
+      "action": "GRASP",
+      "confidence": 0.9886205196380615,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "告诉我今天的天气",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.7904538512229919,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.375
+    },
+    {
+      "text": "请帮我告诉我今天的天气。",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9970064759254456,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "嗯，考虑一下，告诉我今天的天气",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9155879616737366,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.2
+    },
+    {
+      "text": "我想了想，告诉我今天的天气",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.7630300521850586,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.23076923076923078
+    },
+    {
+      "text": "请帮我先执行<TASK>然后运行<TASK>。",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9417863488197327,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，先执行<TASK>然后运行<TASK>",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.919738233089447,
+      "accepted": false,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "将<OBJ>旋转九十度",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9993079900741577,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.42857142857142855
+    },
+    {
+      "text": "请帮我将<OBJ>旋转九十度。",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9992115497589111,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.2727272727272727
+    },
+    {
+      "text": "嗯，考虑一下，将<OBJ>旋转九十度",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9995667338371277,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.21428571428571427
+    },
+    {
+      "text": "我想了想，将<OBJ>旋转九十度",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.997676432132721,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "为<OBJ>拍一张照片",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9996473789215088,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.2857142857142857
+    },
+    {
+      "text": "切割<OBJ>",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9965728521347046,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.3333333333333333
+    }
+  ]
+}

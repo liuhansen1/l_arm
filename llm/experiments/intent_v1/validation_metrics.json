@@ -1,0 +1,163 @@
+{
+  "samples": 84,
+  "accuracy": 1.0,
+  "accepted_coverage": 0.9523809523809523,
+  "accepted_accuracy": 1.0,
+  "macro_f1": 1.0,
+  "per_class": {
+    "GRASP": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "PLACE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "MOVE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "STOP": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "RUN_TASK": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "CLARIFY": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "UNSUPPORTED": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    }
+  },
+  "labels": [
+    "GRASP",
+    "PLACE",
+    "MOVE",
+    "STOP",
+    "RUN_TASK",
+    "CLARIFY",
+    "UNSUPPORTED"
+  ],
+  "confusion_matrix": [
+    [
+      12,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      12,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      12,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      12,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      12,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      12,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      12
+    ]
+  ],
+  "errors": [
+    {
+      "text": "给<OBJ>喷漆",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.999962329864502,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "先拿<OBJ>然后拿<OBJ>",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9926629066467285,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.2857142857142857
+    },
+    {
+      "text": "告诉我今天的天气",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9996020197868347,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.375
+    },
+    {
+      "text": "请帮我告诉我今天的天气。",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9996116757392883,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    }
+  ]
+}

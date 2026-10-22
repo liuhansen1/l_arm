@@ -1,0 +1,201 @@
+{
+  "samples": 84,
+  "accuracy": 0.9404761904761905,
+  "accepted_coverage": 0.9404761904761905,
+  "accepted_accuracy": 0.9620253164556962,
+  "macro_f1": 0.938355364442321,
+  "per_class": {
+    "GRASP": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "PLACE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "MOVE": {
+      "precision": 0.8571428571428571,
+      "recall": 1.0,
+      "f1": 0.923076923076923,
+      "support": 12
+    },
+    "STOP": {
+      "precision": 1.0,
+      "recall": 0.9166666666666666,
+      "f1": 0.9565217391304348,
+      "support": 12
+    },
+    "RUN_TASK": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 12
+    },
+    "CLARIFY": {
+      "precision": 0.8,
+      "recall": 1.0,
+      "f1": 0.888888888888889,
+      "support": 12
+    },
+    "UNSUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8,
+      "support": 12
+    }
+  },
+  "labels": [
+    "GRASP",
+    "PLACE",
+    "MOVE",
+    "STOP",
+    "RUN_TASK",
+    "CLARIFY",
+    "UNSUPPORTED"
+  ],
+  "confusion_matrix": [
+    [
+      12,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      12,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      12,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      11,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      12,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      12,
+      0
+    ],
+    [
+      0,
+      0,
+      2,
+      0,
+      0,
+      2,
+      8
+    ]
+  ],
+  "errors": [
+    {
+      "text": "请帮我取消正在执行的任务。",
+      "expected": "STOP",
+      "action": "CLARIFY",
+      "confidence": 0.9973256587982178,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.07692307692307693
+    },
+    {
+      "text": "给<OBJ>上色",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999866485595703,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "将<OBJ>切成两半",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999892711639404,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.3333333333333333
+    },
+    {
+      "text": "把<OBJ>清洗干净",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999955892562866,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.3333333333333333
+    },
+    {
+      "text": "机械臂往后移动",
+      "expected": "UNSUPPORTED",
+      "action": "MOVE",
+      "confidence": 0.9782378673553467,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "请帮我机械臂往后移动。",
+      "expected": "UNSUPPORTED",
+      "action": "MOVE",
+      "confidence": 0.9999282360076904,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "讲一个故事",
+      "expected": "UNSUPPORTED",
+      "action": "CLARIFY",
+      "confidence": 0.999998927116394,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.4
+    },
+    {
+      "text": "请帮我讲一个故事。",
+      "expected": "UNSUPPORTED",
+      "action": "CLARIFY",
+      "confidence": 0.9999991655349731,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.2222222222222222
+    }
+  ],
+  "batch_ms_per_sample": 0.32598577378112603,
+  "single_mean_ms": 0.8760707999802738
+}

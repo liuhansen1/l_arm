@@ -1,0 +1,74 @@
+{
+  "checkpoint": "/home/robot/robot_grasping/llm/checkpoints/intent_v1.pt",
+  "checkpoint_sha256": "c28517fc54fd01e8c1057b8df083e0f88d2294921662c67cd48de4f4cdece7f2",
+  "results": [
+    {
+      "instruction": "想一想，我要收拾零件",
+      "normalized_instruction": "想一想,我要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.9996435642242432,
+      "inference_ms": 2.558664000389399,
+      "status": "unmatched",
+      "message": "目标名称带有未匹配的描述，请使用已登记的完整名称或补充别名。"
+    },
+    {
+      "instruction": "我要收拾零件",
+      "normalized_instruction": "我要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.9998836517333984,
+      "inference_ms": 0.8489310021104757,
+      "task_id": 1,
+      "task_name": "收拾零件",
+      "status": "ready",
+      "parse_id": "e919bfa825784596963b49508cead4ff"
+    },
+    {
+      "instruction": "嗯，麻烦帮我抓取零件A",
+      "normalized_instruction": "嗯,麻烦帮我抓取<OBJ>",
+      "source": "model",
+      "model": "transformer",
+      "action": "GRASP",
+      "confidence": 0.9999724626541138,
+      "inference_ms": 0.9367919992655516,
+      "status": "low_confidence",
+      "message": "未知字符比例过高，请使用更明确的表达。"
+    },
+    {
+      "instruction": "我想了想，还是执行收拾零件吧",
+      "normalized_instruction": "我想了想,还是执行<TASK>吧",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.9999395608901978,
+      "inference_ms": 1.3725359967793338,
+      "status": "low_confidence",
+      "message": "未知字符比例过高，请使用更明确的表达。"
+    },
+    {
+      "instruction": "想一想，我不要收拾零件",
+      "normalized_instruction": "想一想,我不要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "CLARIFY",
+      "confidence": 0.9999961853027344,
+      "inference_ms": 0.9142330018221401,
+      "status": "clarify",
+      "message": "指令包含否定要求，本次不执行动作。"
+    },
+    {
+      "instruction": "想一想，我要抓取大零件A",
+      "normalized_instruction": "想一想,我要抓取大<OBJ>",
+      "source": "model",
+      "model": "transformer",
+      "action": "GRASP",
+      "confidence": 0.9999316930770874,
+      "inference_ms": 1.0852059967874084,
+      "status": "unmatched",
+      "message": "目标名称带有未匹配的描述，请使用已登记的完整名称或补充别名。"
+    }
+  ]
+}

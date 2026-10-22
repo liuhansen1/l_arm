@@ -1,0 +1,55 @@
+{
+  "examples": [
+    {
+      "instruction": "想一想，我要收拾零件",
+      "before_status": "unmatched",
+      "after_status": "ready",
+      "after_action": "RUN_TASK"
+    },
+    {
+      "instruction": "我要收拾零件",
+      "before_status": "ready",
+      "after_status": "ready",
+      "after_action": "RUN_TASK"
+    },
+    {
+      "instruction": "嗯，麻烦帮我抓取零件A",
+      "before_status": "low_confidence",
+      "after_status": "ready",
+      "after_action": "GRASP"
+    },
+    {
+      "instruction": "我想了想，还是执行收拾零件吧",
+      "before_status": "low_confidence",
+      "after_status": "ready",
+      "after_action": "RUN_TASK"
+    },
+    {
+      "instruction": "想一想，我不要收拾零件",
+      "before_status": "clarify",
+      "after_status": "clarify",
+      "after_action": "CLARIFY"
+    },
+    {
+      "instruction": "想一想，我要抓取大零件A",
+      "before_status": "unmatched",
+      "after_status": "unmatched",
+      "after_action": "GRASP"
+    }
+  ],
+  "baseline_on_v2_test": {
+    "samples": 350,
+    "accuracy": 0.8314285714285714,
+    "accepted_coverage": 0.6485714285714286,
+    "accepted_accuracy": 0.8898678414096917,
+    "macro_f1": 0.8272695800762561
+  },
+  "current_on_v2_test": {
+    "samples": 350,
+    "accuracy": 0.9228571428571428,
+    "accepted_coverage": 0.9714285714285714,
+    "accepted_accuracy": 0.9352941176470588,
+    "macro_f1": 0.9188336286680203
+  },
+  "note": "350 条受控开发回归集；未参与梯度训练，不能视为开放域准确率或完全盲测。"
+}

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f9">
+  <meta name="description" content="Panda 机械臂抓取工作台：点选物体、登记坐标、组合任务和中文指令。">
+  <title>Panda Studio · 机械臂抓取工作台</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <svg class="icon-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-arm" viewBox="0 0 24 24"><path d="M4 21h16M7 21v-4l4-3-3-5 5-5 5 4-4 5M11 14l4 3v4M17 7l3-1 2 3-3 3M5 6l3 3"/><circle cx="13" cy="4" r="2"/><circle cx="8" cy="9" r="2"/><circle cx="11" cy="14" r="2"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="m12 3 9 5v9l-9 5-9-5V8l9-5Zm0 9v10M3 8l9 4 9-4M8 5l9 5"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="5" rx="1"/><rect x="2" y="17" width="8" height="5" rx="1"/><rect x="14" y="17" width="8" height="5" rx="1"/><path d="M12 7v5H6v5m6-5h6v5"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m10 3-1 3-3 1-3 3 2 3-1 3 3 3 3-1 3 2 3-2 3-1 1-4-2-2V8l-3-2-1-3h-4Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5 8a8 8 0 0 1 14-2l1 6M4 12l1 6a8 8 0 0 0 14-2"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8V4Z"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="m15 4 5 5M4 15 16 3a2 2 0 0 1 5 5L9 20l-6 1 1-6Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+  </svg>
+
+  <aside class="sidebar">
+    <a class="brand" href="#workspace" aria-label="Panda Studio 首页">
+      <span class="brand-icon"><svg class="icon"><use href="#i-arm"/></svg></span>
+      <span>Panda<span class="brand-light"> Studio</span><small>机械臂任务工作台</small></span>
+    </a>
+    <div class="project-switch"><span class="project-avatar">P</span><div><strong>我的抓取项目</strong><small>Personal workspace</small></div><span class="project-chevron">⌄</span></div>
+    <div class="nav-caption">工作空间</div>
+    <nav aria-label="主导航">
+      <a class="nav-item active" href="#workspace" data-nav="workspace"><svg class="icon"><use href="#i-grid"/></svg>抓取工作台<span class="nav-dot"></span></a>
+      <a class="nav-item" href="#objects" data-nav="objects"><svg class="icon"><use href="#i-cube"/></svg>物体库<span id="object-count" class="nav-count">0</span></a>
+      <a class="nav-item" href="#placements" data-nav="placements"><svg class="icon"><use href="#i-target"/></svg>放置点<span id="placement-count" class="nav-count">0</span></a>
+      <a class="nav-item" href="#tasks" data-nav="tasks"><svg class="icon"><use href="#i-flow"/></svg>任务编排</a>
+    </nav>
+    <div class="sidebar-guide"><span class="guide-icon">↗</span><strong>从点选到抓取</strong><p>登记你的物体，组合动作，让一句话成为一个任务。</p><button class="text-link" id="guide-button">开始登记 <span>→</span></button></div>
+    <div class="sidebar-bottom">
+      <button class="nav-item memory-button" id="clear-memory" type="button" title="清除所有记忆" aria-label="清除所有记忆" disabled><svg class="icon"><use href="#i-trash"/></svg>清除所有记忆</button>
+      <button class="nav-item" id="settings-button"><svg class="icon"><use href="#i-settings"/></svg>接口设置</button>
+      <div class="robot-profile"><span class="robot-avatar"><svg class="icon"><use href="#i-arm"/></svg></span><div><strong>Franka Emika Panda</strong><small>7 轴机械臂 · 双指夹爪</small></div></div>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumb">我的项目<svg class="icon"><use href="#i-chevron"/></svg><strong id="breadcrumb-page">抓取工作台</strong></div><div class="topbar-actions"><span class="connection-pill" id="connection-status"><i></i>本地预览</span><button class="icon-button" id="top-settings" title="接口设置" aria-label="接口设置"><svg class="icon"><use href="#i-settings"/></svg></button><span class="user-avatar">P</span></div></header>
+    <main>
+      <div id="connection-error" class="error-banner" role="alert" hidden></div>
+      <section data-page="workspace">
+        <div class="page-heading"><div><span class="eyebrow">PANDA WORKSPACE</span><h1>抓取工作台<span class="heading-dot">.</span></h1><p>点选一个物体，开始定义你的抓取任务。</p></div><button class="button button-danger-outline stop-button"><svg class="icon"><use href="#i-stop"/></svg>停止任务</button></div>
+        <div class="workspace-grid">
+          <section class="panel camera-panel" aria-label="机械臂仿真画面">
+            <div class="panel-header"><div class="panel-title"><span class="status-dot"></span><h2>实时仿真</h2><span class="badge">PyBullet</span></div><div class="camera-tools"><button class="button button-secondary" id="reset-scene" title="恢复机械臂和方块的初始状态"><svg class="icon"><use href="#i-refresh"/></svg>重置场景</button><button class="icon-button" id="refresh-scene" title="刷新画面" aria-label="刷新画面"><svg class="icon"><use href="#i-target"/></svg></button></div></div>
+            <div class="camera-stage" id="camera-stage" aria-busy="true">
+              <canvas id="scene-image" role="img" aria-label="PyBullet 原生 Panda 实时相机画面"></canvas>
+              <div class="camera-label"><svg class="icon"><use href="#i-target"/></svg><span id="camera-hint">点击任意位置，采集三维坐标</span></div>
+              <span class="camera-corner top-left"></span><span class="camera-corner top-right"></span><span class="camera-corner bottom-left"></span><span class="camera-corner bottom-right"></span>
+              <div id="scene-markers"></div>
+              <div class="camera-bottom"><span>FRANKA PANDA</span><span id="frame-caption">原生仿真画面 · 静态预览</span></div>
+              <div id="scene-loading" class="camera-loading">正在加载仿真画面…</div>
+            </div>
+            <div class="camera-footer"><span class="muted">按颜色定位</span><div class="cube-selectors"><button class="cube-chip" data-color="red"><span class="cube-dot red"></span>红色</button><button class="cube-chip" data-color="green"><span class="cube-dot green"></span>绿色</button><button class="cube-chip" data-color="blue"><span class="cube-dot blue"></span>蓝色</button></div><span class="axis-label">WORLD · m</span></div>
+          </section>
+
+          <section class="panel object-editor" aria-labelledby="object-editor-title">
+            <div class="panel-header"><div class="panel-title"><svg class="icon"><use href="#i-cube"/></svg><h2 id="object-editor-title">物体登记</h2></div><span class="step-label">01 / SELECT</span></div>
+            <form id="object-form" class="editor-body">
+              <div class="registration-controls"><label for="registration-kind">登记类型</label><select id="registration-kind"><option value="object">抓取物体</option><option value="placement">放置点</option></select><button type="button" class="button button-secondary" id="new-target">新建</button></div>
+              <div class="selected-object" id="selected-object"><span class="selection-icon"><svg class="icon"><use href="#i-target"/></svg></span><div><strong id="selection-title">选择一个位置</strong><small id="selection-description">点击画面任意位置采集坐标</small></div><span id="selection-check" hidden>✓</span></div>
+              <label class="field-label" for="object-name"><span id="target-name-label">物体名称</span> <span class="required">*</span></label><input id="object-name" name="name" placeholder="请输入你为物体取的名称" maxlength="60" required disabled>
+              <label class="field-label" for="object-aliases"><span id="target-alias-label">物体别名</span> <span class="optional">选填</span></label><input id="object-aliases" name="aliases" placeholder="可选：填写其他叫法" maxlength="300" disabled><p class="field-help" id="target-help">多个别名使用逗号分隔，由你定义这个物体的名称。</p>
+              <div class="coordinate-heading"><span class="field-label" id="target-coordinate-label">抓取坐标</span><span class="unit-badge">世界坐标 / m</span></div>
+              <div class="coordinate-inputs"><label><span class="x-axis">X</span><input id="object-x" aria-label="X 坐标" type="number" step="0.001" required disabled></label><label><span class="y-axis">Y</span><input id="object-y" aria-label="Y 坐标" type="number" step="0.001" required disabled></label><label><span class="z-axis">Z</span><input id="object-z" aria-label="Z 坐标" type="number" step="0.001" required disabled></label></div>
+              <p class="field-help" id="position-source">预览模式点选后吸附到方块中心。</p>
+              <div class="editor-actions"><button class="button button-primary" id="save-object" type="submit" disabled><svg class="icon"><use href="#i-check"/></svg><span id="save-target-label">保存物体</span></button><button class="button button-secondary" id="test-grasp" type="button" disabled><svg class="icon"><use href="#i-play"/></svg>按坐标试抓</button></div>
+              <div id="grasp-test-result" class="grasp-test-result" aria-live="polite" hidden></div>
+              <p class="editor-note" id="storage-note"><span class="tiny-dot"></span>预览数据保存在当前浏览器</p>
+            </form>
+          </section>
+        </div>
+
+        <section class="panel instruction-panel" aria-labelledby="instruction-title">
+          <div class="panel-header"><div class="panel-title"><svg class="icon"><use href="#i-code"/></svg><h2 id="instruction-title">用一句话，发起任务</h2></div><span class="subtle-badge" id="inference-source">规则预览 · 未调用模型</span></div>
+          <div class="instruction-body"><div class="instruction-controls"><div class="model-switch" aria-label="语言模型"><button type="button" class="active" disabled>Transformer<span>四层自训模型</span></button></div><span class="instruction-tip">识别动作，名称与任务可随时添加</span></div>
+            <form id="instruction-form" class="command-input"><svg class="icon"><use href="#i-chevron"/></svg><input id="instruction" aria-label="中文任务指令" placeholder="请先点选并登记物体，再输入抓取指令" maxlength="500" required><button class="button button-primary" id="parse-button" type="submit">解析指令<svg class="icon"><use href="#i-arrow"/></svg></button></form>
+            <div class="examples"><span>试一试</span><button id="example-grasp" data-example="" disabled>登记物体后生成示例</button><button id="example-alias" data-example="" hidden></button><button id="example-place" data-example="" hidden></button><button data-example="停止当前任务">停止当前任务 ↗</button></div>
+            <div class="parse-result" id="parse-result" hidden></div>
+            <div class="instruction-bottom"><div class="activity-line"><span class="status-dot"></span><span id="activity-text">准备就绪，等待你的第一条指令</span></div><button class="button button-dark" id="execute-button" disabled><svg class="icon"><use href="#i-play"/></svg><span>预览执行请求</span></button></div>
+            <details id="request-details" hidden><summary>查看请求与响应</summary><pre id="request-payload"></pre></details>
+          </div>
+        </section>
+        <div class="page-footnote"><span>点击登记 → 配置任务 → 中文指令</span><span id="workspace-mode-note">交互预览 · 模型与运动执行接口待接入</span></div>
+      </section>
+
+      <section data-page="objects" hidden>
+        <div class="page-heading"><div><span class="eyebrow">OBJECT LIBRARY</span><h1>你的物体库<span class="heading-dot">.</span></h1><p>为物体或采集点命名，保存你自己的任务目标。</p></div><button class="button button-primary" id="add-object"><svg class="icon"><use href="#i-plus"/></svg>登记物体</button></div>
+        <div class="library-stats"><div><span class="stat-icon"><svg class="icon"><use href="#i-cube"/></svg></span><div><strong id="library-total">0</strong><span>已登记物体</span></div></div><div><span class="stat-icon"><svg class="icon"><use href="#i-code"/></svg></span><div><strong id="alias-total">0</strong><span>名称别名</span></div></div><p>新增名称与别名无需更改模型词表。</p></div>
+        <section class="panel"><div class="panel-header"><div class="panel-title"><h2>全部物体</h2><span class="badge">物体 / 采集点</span></div><input class="search-input" id="object-search" placeholder="搜索名称或别名" aria-label="搜索物体"></div><div class="table-wrap"><table><thead><tr><th>物体名称</th><th>别名</th><th>抓取坐标 / m</th><th>关联技能</th><th>操作</th></tr></thead><tbody id="object-table"></tbody></table></div><div class="empty-state" id="objects-empty" hidden>还没有匹配的物体，前往工作台点选登记。</div></section>
+      </section>
+
+      <section data-page="placements" hidden>
+        <div class="page-heading"><div><span class="eyebrow">PLACEMENT POINTS</span><h1>物体，放到哪里<span class="heading-dot">.</span></h1><p>点选地面或方块顶部中央，命名后用于定点放置和堆叠。</p></div><button class="button button-primary" id="add-placement"><svg class="icon"><use href="#i-plus"/></svg>登记放置点</button></div>
+        <section class="panel"><div class="panel-header"><div class="panel-title"><h2>已保存放置点</h2><span class="badge">支撑面坐标 · m</span></div><input class="search-input" id="placement-search" placeholder="搜索放置点名称或别名" aria-label="搜索放置点"></div><div class="table-wrap"><table><thead><tr><th>放置点名称</th><th>别名</th><th>表面坐标 / m</th><th>操作</th></tr></thead><tbody id="placement-table"></tbody></table></div><div class="empty-state" id="placements-empty">尚未登记放置点。点击“登记放置点”，在画面点选后保存。</div></section>
+      </section>
+
+      <section data-page="tasks" hidden>
+        <div class="page-heading"><div><span class="eyebrow">TASK BUILDER</span><h1>把动作，组合成任务<span class="heading-dot">.</span></h1><p>选择物体和动作，保存后就能通过任务名称发起执行。</p></div><button class="button button-secondary" id="new-task"><svg class="icon"><use href="#i-plus"/></svg>新建任务</button></div>
+        <div class="tasks-layout"><section class="panel"><div class="panel-header"><div class="panel-title"><svg class="icon"><use href="#i-flow"/></svg><h2 id="task-editor-title">创建任务</h2></div><span class="badge">顺序执行</span></div><form id="task-form" class="task-form"><label class="field-label" for="task-name">任务名称 <span class="required">*</span></label><input id="task-name" placeholder="例如：零件归位" required maxlength="60"><label class="field-label" for="task-aliases">任务别名 <span class="optional">选填</span></label><input id="task-aliases" placeholder="收拾零件，整理方块" maxlength="300"><div class="coordinate-heading"><span class="field-label">动作步骤</span><span class="muted">自上而下依次执行</span></div><div id="task-steps"></div><button class="add-step-button" id="add-step" type="button"><svg class="icon"><use href="#i-plus"/></svg>添加一个步骤</button><div class="task-form-footer"><span class="muted">任务配置将交给后端执行</span><button class="button button-primary" type="submit"><svg class="icon"><use href="#i-check"/></svg>保存任务</button></div></form></section>
+        <section><div class="saved-heading"><h2>已保存任务 <span id="task-count">0</span></h2></div><div id="saved-tasks"></div><div class="task-empty" id="tasks-empty"><span class="empty-illustration"><svg class="icon"><use href="#i-flow"/></svg></span><h3>你的第一个自动化任务</h3><p>先从抓取一个方块开始，再加入移动和放下步骤。</p><button class="button button-secondary" id="sample-task">填入抓取示例<svg class="icon"><use href="#i-arrow"/></svg></button></div></section></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="settings-dialog"><form id="settings-form"><div class="dialog-heading"><div><span class="eyebrow">CONNECTION</span><h2>接口设置</h2></div><button class="icon-button" type="button" id="close-settings" aria-label="关闭设置"><svg class="icon"><use href="#i-close"/></svg></button></div><label class="field-label" for="connection-mode">运行模式</label><select id="connection-mode"><option value="preview">本地预览 · 浏览器保存配置</option><option value="backend">后端服务 · HTTP 接口</option></select><label class="field-label" for="api-base-url">后端 API 地址</label><input id="api-base-url" type="url" placeholder="http://127.0.0.1:8000/api/v1" required><p class="field-help">接入后使用后端的相机画面、点选、数据库和执行接口。接口说明见 frontend/API.md。</p><div class="settings-preview-note">本地预览使用原生 PyBullet 场景截图。规则解析仅用于交互演示，不会调用模型或驱动机械臂。</div><div class="dialog-actions"><button class="button text-danger" id="clear-preview" type="button">清除预览数据</button><button class="button button-primary" type="submit">保存并连接<svg class="icon"><use href="#i-arrow"/></svg></button></div></form></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

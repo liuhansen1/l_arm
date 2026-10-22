@@ -1,0 +1,105 @@
+{
+  "checkpoint": "/home/robot/robot_grasping/llm/checkpoints/intent_v2.pt",
+  "checkpoint_sha256": "10ab712b03405d3477cf0a43b8238698d8e59d4f5e78f0edea41d85d4cbcff20",
+  "results": [
+    {
+      "instruction": "想一想，我要收拾零件",
+      "normalized_instruction": "想一想,我要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.9827987551689148,
+      "inference_ms": 2.510049002012238,
+      "task_id": 1,
+      "task_name": "收拾零件",
+      "status": "ready",
+      "parse_id": "6a1fb8db69a041038cc7cccf81169e61"
+    },
+    {
+      "instruction": "我要收拾零件",
+      "normalized_instruction": "我要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.9999938011169434,
+      "inference_ms": 0.9225680041708983,
+      "task_id": 1,
+      "task_name": "收拾零件",
+      "status": "ready",
+      "parse_id": "53e3fc1a46fa4bc496753424dda7d531"
+    },
+    {
+      "instruction": "嗯，麻烦帮我抓取零件A",
+      "normalized_instruction": "嗯,麻烦帮我抓取<OBJ>",
+      "source": "model",
+      "model": "transformer",
+      "action": "GRASP",
+      "confidence": 0.999990701675415,
+      "inference_ms": 0.9427529948879965,
+      "object_id": 1,
+      "object_name": "零件A",
+      "status": "ready",
+      "parse_id": "19bb12f05b504621b2dfcf3464c998fc"
+    },
+    {
+      "instruction": "我想了想，还是执行收拾零件吧",
+      "normalized_instruction": "我想了想,还是执行<TASK>吧",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.996802806854248,
+      "inference_ms": 1.276397000765428,
+      "task_id": 1,
+      "task_name": "收拾零件",
+      "status": "ready",
+      "parse_id": "14055b73cd6d41b582e8a15b5f7cdcfb"
+    },
+    {
+      "instruction": "想一想，我不要收拾零件",
+      "normalized_instruction": "想一想,我不要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "CLARIFY",
+      "confidence": 0.9999966621398926,
+      "inference_ms": 1.0413019990664907,
+      "status": "clarify",
+      "message": "指令包含否定要求，本次不执行动作。"
+    },
+    {
+      "instruction": "想一想，我要抓取大零件A",
+      "normalized_instruction": "想一想,我要抓取大<OBJ>",
+      "source": "model",
+      "model": "transformer",
+      "action": "GRASP",
+      "confidence": 0.9994066953659058,
+      "inference_ms": 0.943940001889132,
+      "status": "unmatched",
+      "message": "目标名称带有未匹配的描述，请使用已登记的完整名称或补充别名。"
+    },
+    {
+      "instruction": "嗯，想一下，我要收拾零件",
+      "normalized_instruction": "嗯,想一下,我要<TASK>",
+      "source": "model",
+      "model": "transformer",
+      "action": "RUN_TASK",
+      "confidence": 0.9999823570251465,
+      "inference_ms": 1.1540999985300004,
+      "task_id": 1,
+      "task_name": "收拾零件",
+      "status": "ready",
+      "parse_id": "234a59bc1f2b4fe5944152bccc0bad15"
+    },
+    {
+      "instruction": "想一想，别动",
+      "normalized_instruction": "想一想,别动",
+      "source": "model",
+      "model": "transformer",
+      "model_input": "别动",
+      "action": "STOP",
+      "confidence": 0.9999984502792358,
+      "inference_ms": 1.2324649942456745,
+      "status": "ready",
+      "parse_id": "982ab70a36014120af6277d5cb84fc1d"
+    }
+  ]
+}

@@ -1,0 +1,271 @@
+{
+  "samples": 279,
+  "accuracy": 0.982078853046595,
+  "accepted_coverage": 0.9605734767025089,
+  "accepted_accuracy": 0.9813432835820896,
+  "macro_f1": 0.982050723928361,
+  "per_class": {
+    "GRASP": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 40
+    },
+    "PLACE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 40
+    },
+    "MOVE": {
+      "precision": 0.975609756097561,
+      "recall": 1.0,
+      "f1": 0.9876543209876543,
+      "support": 40
+    },
+    "STOP": {
+      "precision": 1.0,
+      "recall": 0.975,
+      "f1": 0.9873417721518987,
+      "support": 40
+    },
+    "RUN_TASK": {
+      "precision": 0.9512195121951219,
+      "recall": 1.0,
+      "f1": 0.975,
+      "support": 39
+    },
+    "CLARIFY": {
+      "precision": 0.95,
+      "recall": 0.95,
+      "f1": 0.9500000000000001,
+      "support": 40
+    },
+    "UNSUPPORTED": {
+      "precision": 1.0,
+      "recall": 0.95,
+      "f1": 0.9743589743589743,
+      "support": 40
+    }
+  },
+  "labels": [
+    "GRASP",
+    "PLACE",
+    "MOVE",
+    "STOP",
+    "RUN_TASK",
+    "CLARIFY",
+    "UNSUPPORTED"
+  ],
+  "confusion_matrix": [
+    [
+      40,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      40,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      40,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      39,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      39,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      2,
+      38,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      38
+    ]
+  ],
+  "errors": [
+    {
+      "text": "嗯，考虑一下，机械臂先停一下",
+      "expected": "STOP",
+      "action": "MOVE",
+      "confidence": 0.8782389163970947,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "赶快停下",
+      "expected": "STOP",
+      "action": "STOP",
+      "confidence": 0.9999905824661255,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "我还在想是否执行<TASK>",
+      "expected": "CLARIFY",
+      "action": "RUN_TASK",
+      "confidence": 0.9997100234031677,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "嗯，考虑一下，我还在想是否执行<TASK>",
+      "expected": "CLARIFY",
+      "action": "RUN_TASK",
+      "confidence": 0.9381281733512878,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "给<OBJ>喷漆",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999918937683105,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "告诉我今天的天气",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9993396401405334,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.375
+    },
+    {
+      "text": "请帮我告诉我今天的天气。",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9992344379425049,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "我想了想，告诉我今天的天气",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.818560004234314,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.23076923076923078
+    },
+    {
+      "text": "嗯，考虑一下，先执行<TASK>然后运行<TASK>",
+      "expected": "UNSUPPORTED",
+      "action": "CLARIFY",
+      "confidence": 0.6270675659179688,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "我想了想，先执行<TASK>然后运行<TASK>",
+      "expected": "UNSUPPORTED",
+      "action": "CLARIFY",
+      "confidence": 0.9484646916389465,
+      "accepted": true,
+      "reason": null,
+      "unknown_ratio": 0.0
+    },
+    {
+      "text": "将<OBJ>旋转九十度",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999955892562866,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.42857142857142855
+    },
+    {
+      "text": "请帮我将<OBJ>旋转九十度。",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999825954437256,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.2727272727272727
+    },
+    {
+      "text": "嗯，考虑一下，将<OBJ>旋转九十度",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9992707371711731,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.21428571428571427
+    },
+    {
+      "text": "我想了想，将<OBJ>旋转九十度",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999929666519165,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.25
+    },
+    {
+      "text": "为<OBJ>拍一张照片",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999938011169434,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.2857142857142857
+    },
+    {
+      "text": "切割<OBJ>",
+      "expected": "UNSUPPORTED",
+      "action": "UNSUPPORTED",
+      "confidence": 0.9999749660491943,
+      "accepted": false,
+      "reason": "未知字符比例过高，请使用更明确的表达。",
+      "unknown_ratio": 0.3333333333333333
+    }
+  ]
+}

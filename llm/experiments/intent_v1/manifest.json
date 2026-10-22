@@ -1,0 +1,44 @@
+{
+  "seed": 20261022,
+  "threads": 4,
+  "epochs_completed": 32,
+  "best_epoch": 24,
+  "config": {
+    "vocab_size": 172,
+    "max_length": 64,
+    "d_model": 192,
+    "num_layers": 4,
+    "num_heads": 4,
+    "dim_feedforward": 768,
+    "dropout": 0.1,
+    "architecture": "intent",
+    "color_token_ids": []
+  },
+  "actions": [
+    "GRASP",
+    "PLACE",
+    "MOVE",
+    "STOP",
+    "RUN_TASK",
+    "CLARIFY",
+    "UNSUPPORTED"
+  ],
+  "confidence_threshold": 0.9,
+  "parameters": 1826503,
+  "training_seconds": 49.151647085996956,
+  "checkpoint_sha256": "c28517fc54fd01e8c1057b8df083e0f88d2294921662c67cd48de4f4cdece7f2",
+  "datasets": {
+    "train": {
+      "sha256": "6c71d7420e6f5aa254c2a59198d7c5718457603509dfd180381cf8fe29bbf406",
+      "samples": 1498
+    },
+    "validation": {
+      "sha256": "0f2a510d0f60bf92807b07cc075f48e9dd43aa4cbbb3e822c515b0e1fcdae71d",
+      "samples": 84
+    },
+    "test": {
+      "sha256": "00c25f2446576c90c0573cb681284ff8d4c554a7ccb7d8d5e5daa311c09bfe32",
+      "samples": 84
+    }
+  }
+}

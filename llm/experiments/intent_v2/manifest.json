@@ -1,0 +1,48 @@
+{
+  "seed": 20261022,
+  "threads": 4,
+  "epochs_completed": 17,
+  "best_epoch": 9,
+  "learning_rate": 0.0001,
+  "initial_checkpoint": {
+    "path": "llm/checkpoints/intent_v1.pt",
+    "sha256": "c28517fc54fd01e8c1057b8df083e0f88d2294921662c67cd48de4f4cdece7f2"
+  },
+  "config": {
+    "vocab_size": 224,
+    "max_length": 64,
+    "d_model": 192,
+    "num_layers": 4,
+    "num_heads": 4,
+    "dim_feedforward": 768,
+    "dropout": 0.1,
+    "architecture": "intent"
+  },
+  "actions": [
+    "GRASP",
+    "PLACE",
+    "MOVE",
+    "STOP",
+    "RUN_TASK",
+    "CLARIFY",
+    "UNSUPPORTED"
+  ],
+  "confidence_threshold": 0.6,
+  "parameters": 1836487,
+  "training_seconds": 88.34293434900246,
+  "checkpoint_sha256": "10ab712b03405d3477cf0a43b8238698d8e59d4f5e78f0edea41d85d4cbcff20",
+  "datasets": {
+    "train": {
+      "sha256": "c4d18db8916bb2d2bc18225fa98a15229e3ff55b411e2ddd69d1e2a275503d8e",
+      "samples": 4028
+    },
+    "validation": {
+      "sha256": "8294fe498c227707ed25b924c2401f581d373c737fc465ca5e6bcd2bc5fb28ef",
+      "samples": 279
+    },
+    "test": {
+      "sha256": "3ac555b1902dbfce5f41858b7da2a6211b483cab432c28780aa76018e698881f",
+      "samples": 350
+    }
+  }
+}

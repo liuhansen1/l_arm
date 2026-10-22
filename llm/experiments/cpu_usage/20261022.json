@@ -1,0 +1,157 @@
+{
+  "measured_date": "2026-10-22",
+  "checkpoint": "llm/checkpoints/intent_v2.pt",
+  "scope": "IntentParser.predict only; no PyBullet, web server or browser; startup and warmup excluded",
+  "hardware": {
+    "cpu": "AMD Ryzen 9 8945HX with Radeon Graphics",
+    "physical_cores": 16,
+    "logical_cpus": 32
+  },
+  "configuration": {
+    "device": "cpu",
+    "model_parameter_devices": [
+      "cpu"
+    ],
+    "intraop_threads": 4,
+    "interop_thread_limit": 16,
+    "cuda_initialized": false
+  },
+  "inputs": [
+    "抓取<OBJ>",
+    "把<OBJ>放到<OBJ>",
+    "移动到<OBJ>",
+    "停止当前任务",
+    "执行<TASK>"
+  ],
+  "method": {
+    "warmup_predictions": 50,
+    "cpu_clock": "time.process_time, aggregate CPU time of all process threads",
+    "wall_clock": "time.perf_counter",
+    "single_core_percent": "100 * cpu_seconds / wall_seconds",
+    "machine_percent": "single_core_percent / 32",
+    "effective_logical_cores": "cpu_seconds / wall_seconds",
+    "thread_sampling": "per-thread /proc/self/task/*/stat; active means positive CPU tick delta",
+    "repetitions": 1
+  },
+  "samples": [
+    {
+      "scenario": "loaded_idle",
+      "wall_seconds": 3.0000837830011733,
+      "cpu_seconds": 0.000029066999999827203,
+      "requests": 0,
+      "single_core_percent": 0.0009688729416333048,
+      "machine_percent": 0.000030277279426040776,
+      "effective_logical_cores": 0.000009688729416333048,
+      "resident_threads": 38,
+      "active_threads": 0,
+      "thread_usage": [],
+      "mean_latency_ms": null,
+      "p95_latency_ms": null
+    },
+    {
+      "scenario": "one_request_per_second",
+      "wall_seconds": 5.000105310995423,
+      "cpu_seconds": 0.08554150899999957,
+      "requests": 5,
+      "single_core_percent": 1.7107941469130763,
+      "machine_percent": 0.053462317091033634,
+      "effective_logical_cores": 0.017107941469130764,
+      "resident_threads": 38,
+      "active_threads": 4,
+      "thread_usage": [
+        {
+          "tid": 38,
+          "cpu_seconds": 0.03,
+          "single_core_percent": 0.5999873629467134
+        },
+        {
+          "tid": 37,
+          "cpu_seconds": 0.02,
+          "single_core_percent": 0.39999157529780893
+        },
+        {
+          "tid": 39,
+          "cpu_seconds": 0.02,
+          "single_core_percent": 0.39999157529780893
+        },
+        {
+          "tid": 2,
+          "cpu_seconds": 0.01,
+          "single_core_percent": 0.19999578764890447
+        }
+      ],
+      "mean_latency_ms": 1.6629793986794539,
+      "p95_latency_ms": 1.9472269996185787
+    },
+    {
+      "scenario": "continuous_inference",
+      "wall_seconds": 5.0002908940005,
+      "cpu_seconds": 19.99578196,
+      "requests": 8350,
+      "single_core_percent": 399.8923739415149,
+      "machine_percent": 12.49663668567234,
+      "effective_logical_cores": 3.998923739415149,
+      "resident_threads": 38,
+      "active_threads": 4,
+      "thread_usage": [
+        {
+          "tid": 2,
+          "cpu_seconds": 5,
+          "single_core_percent": 99.99418245844758
+        },
+        {
+          "tid": 37,
+          "cpu_seconds": 5,
+          "single_core_percent": 99.99418245844758
+        },
+        {
+          "tid": 38,
+          "cpu_seconds": 5,
+          "single_core_percent": 99.99418245844758
+        },
+        {
+          "tid": 39,
+          "cpu_seconds": 5,
+          "single_core_percent": 99.99418245844758
+        }
+      ],
+      "mean_latency_ms": 0.5957591224881447,
+      "p95_latency_ms": 0.6601580025744624
+    },
+    {
+      "scenario": "five_requests_per_second",
+      "wall_seconds": 4.000075864998507,
+      "cpu_seconds": 0.33687146199999773,
+      "requests": 20,
+      "single_core_percent": 8.421626823323349,
+      "machine_percent": 0.26317583822885465,
+      "effective_logical_cores": 0.08421626823323348,
+      "resident_threads": 38,
+      "active_threads": 4,
+      "thread_usage": [
+        {
+          "tid": 37,
+          "cpu_seconds": 0.11,
+          "single_core_percent": 2.7499478438027336
+        },
+        {
+          "tid": 39,
+          "cpu_seconds": 0.11,
+          "single_core_percent": 2.7499478438027336
+        },
+        {
+          "tid": 38,
+          "cpu_seconds": 0.1,
+          "single_core_percent": 2.4999525852752127
+        },
+        {
+          "tid": 2,
+          "cpu_seconds": 0.05,
+          "single_core_percent": 1.2499762926376063
+        }
+      ],
+      "mean_latency_ms": 1.6259340995020466,
+      "p95_latency_ms": 2.014904996030964
+    }
+  ]
+}
