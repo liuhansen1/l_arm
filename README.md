@@ -25,22 +25,122 @@
 
 `.gitignore` 仅排除本地虚拟环境、缓存、环境配置和 `backend/data/` 中的用户数据库及备份。机械臂模型文件、控制程序和语言模型资料均纳入版本管理。首次启动会建立空的登记库，不预填用户物体或任务。
 
-## 安装与启动
+## 基础配置
 
-已验证环境为 Linux、Python 3.12，模型默认使用 CPU。新环境可按以下步骤安装并启动：
+推荐按以下基线准备环境。软件与功能验证基于 **Ubuntu 24.04、x86_64、Python 3.12**；硬件建议便于运行网页与软件渲染，不代表经过测试的最低要求。
+
+| 项目 | 配置或要求 |
+| --- | --- |
+| 操作系统 | Ubuntu 24.04 LTS，x86_64 |
+| Python | 3.12，需安装 `venv` 和开发头文件 |
+| CPU | 建议 4 个及以上逻辑核；模型默认使用 CPU，最多配置 4 个计算线程 |
+| 内存与磁盘 | 建议 8 GB 内存，预留至少 4 GB 磁盘用于依赖、缓存和编译 |
+| GPU / 实体机械臂 | 网页默认使用 PyBullet DIRECT 模式和 CPU 渲染，均不要求 |
+| 浏览器 | 支持 Canvas 和 Fetch 流式读取的现代桌面浏览器 |
+| 运行依赖 | NumPy `1.26.4`、PyBullet `3.2.7`、PyTorch `2.11.0+cpu` |
+| 数据库 | Python 自带 SQLite，程序自动建库，无需单独安装数据库服务 |
+| 网络 | 首次拉取和安装依赖需要联网；运行本地模型与仿真无需外部模型服务 |
+
+前端为原生 HTML / CSS / JavaScript，运行时无需 Node.js、npm 安装或前端打包。Node.js 仅用于可选的前端测试。Windows、macOS 和树莓派目前不在已验证基线内。
+
+## 构建方式
+
+本项目的构建过程是创建 Python 环境、安装依赖并执行启动自检。训练好的权重、机械臂 URDF 和网格已包含在仓库内，首次使用无需训练、下载额外模型或手工配置资源路径。
+
+### 1. 安装系统依赖
+
+Ubuntu 24.04 上执行以下命令，安装 Git、Python 虚拟环境、开发头文件和 C/C++ 编译工具：
+
+```bash
+sudo apt update
+sudo apt install -y git python3.12 python3.12-venv python3.12-dev build-essential
+```
+
+PyBullet `3.2.7` 在 Linux / Python 3.12 上首次安装可能需要源码编译，因此上述编译工具不可省略；编译通常比下载其他 Python 包耗时更长。其发布文件见 [PyPI](https://pypi.org/project/pybullet/3.2.7/#files)。
+
+### 2. 拉取工程并创建虚拟环境
 
 ```bash
 git clone https://github.com/liuhansen1/l_arm.git
 cd l_arm
 python3.12 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
+以下命令均在仓库根目录执行，显式指定 `.venv/bin/python`，无需额外执行 `activate`。
+
+### 3. 安装固定版本的 CPU 依赖
+
+```bash
+.venv/bin/python -m pip install --upgrade pip setuptools wheel
+.venv/bin/python -m pip install -r requirements-cpu.txt
+```
+
+[requirements-cpu.txt](requirements-cpu.txt) 同时安装基础依赖和固定版本的 CPU PyTorch，避免遗漏语言模型依赖。CPU 安装包来自 [PyTorch 官方索引](https://download.pytorch.org/whl/cpu/torch/)。[llm/requirements.txt](llm/requirements.txt) 保留原训练环境记录，首次运行使用前述 CPU 依赖文件即可。
+
+### 4. 启动前自检
+
+```bash
+.venv/bin/python -B launch/check.py
+```
+
+自检会实际加载当前权重、仓库内的 Panda 模型、三色方块和仿真相机，并检查 SQLite 建库与初始空库。最后应输出：
+
+```text
+启动自检全部通过。可执行：.venv/bin/python -B launch/web.py
+```
+
+该检查使用临时数据库，退出时自动清理，不读取或覆盖用户已有登记，也不打开浏览器或监听网络端口。自检失败时返回非零退出码，应先处理终端报告的依赖或资源问题。
+
+## 使用方式
+
+### 1. 启动网页与仿真
+
+```bash
 .venv/bin/python -B launch/web.py
 ```
 
-以上使用 CPU 版 PyTorch；其他平台可参考 [PyTorch 官方安装说明](https://pytorch.org/get-started/locally/)。`llm/requirements.txt` 保留原训练环境的精确依赖，供重现训练环境使用。安装命令需要联网，不会替换已保存的模型权重或用户登记数据。
+命令会先加载模型，再初始化机械臂和相机，最后启动网页服务并自动打开 `http://127.0.0.1:8080`。首次物体库、放置点库和任务库为空，这是正常状态。以后启动仍使用同一命令；按 `Ctrl+C` 停止服务和仿真。
 
-如果已有 `.venv_train` 环境，可以直接运行 `.venv_train/bin/python -B launch/web.py`。启动命令会同时初始化仿真、模型和网页服务，并自动打开浏览器。
+浏览器没有自动打开时，手动访问终端打印的地址。没有桌面浏览器的环境可以使用 `--no-browser`；默认仍会运行真实物理仿真。
+
+### 2. 完成第一个抓放任务
+
+1. 等待页面显示后端已连接、画面中出现机械臂和三色方块。
+2. 点选红色方块顶部中央，填写名称“零件A”，保存物体。名称、别名和坐标均由用户登记。
+3. 点击“按坐标试抓”观察抓取结果；试抓结束后先点击“重置场景”，保存的登记会保留。
+4. 切换到放置点登记模式，在可达的空白地面点选位置，命名为“装配区”并保存。放置点使用所点支撑面的坐标。
+5. 在任务编排中建立“零件归位”，添加“抓取零件A → 放置零件A到装配区”，可选别名“收拾零件”，保存任务。
+6. 点击任务的运行按钮，或输入“执行零件归位”，检查解析结果后确认执行。已有别名时也可以输入“我在上课，我想收拾零件”。
+
+单独使用语言抓放时，可先说“抓取零件A”，成功后再说“把零件A放到装配区”。没有持物、目的地未登记或目标不明确时，后端会要求补充，不自动选择放置位置。
+
+物体移动后，原抓取坐标不会自动更新。重新演示同一个任务前可先重置场景；操作新的实际位置时，应重新点选并更新物体坐标。
+
+### 3. 常用启动选项
+
+| 需求 | 命令 |
+| --- | --- |
+| 手动打开浏览器 | `.venv/bin/python -B launch/web.py --no-browser` |
+| 更换端口 | `.venv/bin/python -B launch/web.py --port 8090`，访问 `http://127.0.0.1:8090` |
+| 同时显示原生窗口 | `.venv/bin/python -B launch/web.py --gui`，需要桌面显示环境 |
+| 使用独立登记库 | `.venv/bin/python -B launch/web.py --database backend/data/demo.sqlite3` |
+
+默认数据库是 `backend/data/registry.sqlite3`，首次启动自动创建，重启后保留。重置场景不会清空登记；“清除所有记忆”会删除物体、放置点和任务，点击前页面会要求确认。
+
+### 4. 常见启动问题
+
+| 现象 | 处理方式 |
+| --- | --- |
+| 缺少 `torch`、`numpy` 或 `pybullet` | 用 `.venv/bin/python -m pip install -r requirements-cpu.txt` 安装；确认启动和安装使用同一解释器 |
+| 创建虚拟环境时提示缺少 `ensurepip` | 安装 `python3.12-venv` 后重新创建 `.venv` |
+| PyBullet 编译失败 | 检查 `build-essential`、`python3.12-dev` 是否已安装，保留完整编译日志排查 |
+| 包下载失败 | 检查能否访问 PyPI 和 PyTorch 官方 CPU 索引，检查本机代理设置后重试 |
+| 提示端口被占用 | 使用 `--port 8090`，浏览器访问相同端口 |
+| 缺少权重、URDF 或网格 | 确认已完整拉取仓库，运行 `launch/check.py`；不要只复制 Python 源文件 |
+| 页面提示后端未连接 | 使用 `launch/web.py` 启动，确认服务终端没有退出，浏览器地址与终端输出一致 |
+| 抓取后无法继续执行 | 坐标试抓结束、失败或停止后先重置；普通任务成功抓取后可继续执行放置 |
+
+已有 `.venv_train` 环境可以继续使用，将上述命令中的 `.venv/bin/python` 替换为 `.venv_train/bin/python` 即可。
 
 ## 网页工作台与坐标试抓
 
@@ -67,6 +167,7 @@ robot_grasping/
 ├── frontend/                 # 网页、相机流、坐标编辑与任务编排
 ├── launch/
 │   ├── web.py                 # 网页与后端统一入口
+│   ├── check.py               # 安装依赖、模型、仿真与数据库自检
 │   ├── demo.py                # 启动场景演示
 │   ├── grasp.py               # 启动指定颜色抓取
 │   └── trained_language_grasp.py  # 自训小模型 + 用户登记库的命令行入口
@@ -81,6 +182,7 @@ robot_grasping/
 │   └── requirements.txt       # 自训模型的 PyTorch 依赖
 ├── tests/                     # 无需训练数据的运行回归检查
 ├── requirements.txt           # PyBullet、NumPy 依赖
+├── requirements-cpu.txt       # 新用户默认使用的完整 CPU 依赖
 ├── .venv/                     # 安装时创建，Git 忽略
 └── .venv_train/               # 可选的原训练环境，Git 忽略
 ```

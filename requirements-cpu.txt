@@ -1,0 +1,4 @@
+# 默认运行环境：NumPy、PyBullet 和 CPU 版 PyTorch。
+--extra-index-url https://download.pytorch.org/whl/cpu
+-r requirements.txt
+torch==2.11.0+cpu
