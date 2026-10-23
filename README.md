@@ -4,6 +4,8 @@
 
 项目的设计目的、总体结构和技术亮点见 [项目设计说明](PROJECT_DESIGN.md)。
 
+可从 [GitHub Releases](https://github.com/liuhansen1/l_arm/releases) 下载带版本号的源码与模型发布包；版本说明见 [RELEASE_NOTES.md](RELEASE_NOTES.md)。发布包已经包含训练权重和机械臂模型，运行依赖按下文安装。
+
 项目原创代码采用 [MIT License](LICENSE)。随仓库提供的 Panda 模型资源沿用上游 [Apache License 2.0](robot/models/franka_panda/LICENSE.txt)；用户登记数据和本机环境不随仓库分发。
 
 新版小模型已真实训练并接入网页，支持 GRASP、PLACE、MOVE、STOP、RUN_TASK、CLARIFY、UNSUPPORTED，不识别方向。新增目标、别名和基于已有技能的任务不需要训练。模型、数据、权重和实验记录见 [llm/README.md](llm/README.md)。
@@ -67,6 +69,8 @@ python3.12 -m venv .venv
 ```
 
 以下命令均在仓库根目录执行，显式指定 `.venv/bin/python`，无需额外执行 `activate`。
+
+使用 Release 压缩包时，解压后进入 `l_arm-v版本号/`，跳过 `git clone` 和 `cd l_arm` 两行，从创建 `.venv` 开始执行即可。
 
 ### 3. 安装固定版本的 CPU 依赖
 
@@ -168,6 +172,7 @@ robot_grasping/
 ├── launch/
 │   ├── web.py                 # 网页与后端统一入口
 │   ├── check.py               # 安装依赖、模型、仿真与数据库自检
+│   ├── package_release.py     # 源码发布包、资源清单和校验文件
 │   ├── demo.py                # 启动场景演示
 │   ├── grasp.py               # 启动指定颜色抓取
 │   └── trained_language_grasp.py  # 自训小模型 + 用户登记库的命令行入口
@@ -358,3 +363,22 @@ Content-Type: application/json
 ```bash
 .venv/bin/python -B -m unittest discover -s tests -v
 ```
+
+## 构建 Release
+
+维护者更新 `RELEASE_NOTES.md`，在干净的 Git 工作副本中提交修改、创建版本标签后，可以构建同一标签对应的发布包：
+
+```bash
+git tag -a v1.0.0 -m "l_arm v1.0.0"
+python3 launch/package_release.py --tag v1.0.0
+```
+
+输出位于 `dist/v1.0.0/`，包含 ZIP、tar.gz、逐文件清单和 `SHA256SUMS`。打包程序只读取标签中的已提交文件，并拒绝将数据库、本地虚拟环境或本机配置打包。
+
+推送版本标签会触发仓库的 `Publish Release` 工作流，自动上传附件并发布 GitHub Release：
+
+```bash
+git push --follow-tags origin main
+```
+
+也可在 GitHub Actions 页面手动运行该工作流并填写已存在的版本标签。该流程使用 GitHub 自带的工作流令牌，无需额外配置个人令牌；仓库需要允许 GitHub Actions 运行。
