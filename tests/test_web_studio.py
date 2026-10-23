@@ -385,7 +385,7 @@ class WebStudioTests(unittest.TestCase):
         self.assertEqual(self.store.snapshot(), before)
 
     def test_language_models_and_unverified_execution_are_rejected(self):
-        status, _, _ = self.request("POST", "/api/v1/instructions/parse", {"instruction": "抓取红色方块", "model": "qwen"})
+        status, _, _ = self.request("POST", "/api/v1/instructions/parse", {"instruction": "抓取红色方块", "model": "unsupported_model"})
         self.assertEqual(status, 422)
         status, _, _ = self.request("POST", "/api/v1/jobs", {"action": "RUN_TASK", "task_id": 1})
         self.assertEqual(status, 422)

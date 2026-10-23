@@ -4,37 +4,45 @@
 
 项目的设计目的、总体结构和技术亮点见 [项目设计说明](PROJECT_DESIGN.md)。
 
-公开文件采用 [MIT License](LICENSE)，机械臂私有实现和本地用户数据不随仓库分发。
+项目原创代码采用 [MIT License](LICENSE)。随仓库提供的 Panda 模型资源沿用上游 [Apache License 2.0](robot/models/franka_panda/LICENSE.txt)；用户登记数据和本机环境不随仓库分发。
 
 新版小模型已真实训练并接入网页，支持 GRASP、PLACE、MOVE、STOP、RUN_TASK、CLARIFY、UNSUPPORTED，不识别方向。新增目标、别名和基于已有技能的任务不需要训练。模型、数据、权重和实验记录见 [llm/README.md](llm/README.md)。
 机械臂代码集中在 `robot/`，启动入口集中在 `launch/`。
 
-## 公开范围与运行条件
+## 开源内容
 
-公开部分包含网页前端、SQLite 登记与任务管理、自训 Transformer 的网络、Tokenizer、训练数据、权重及实验记录，以及语言解析和 HTTP 接口层。
+仓库包含从网页示教、语言理解到机械臂实际仿真的完整工程，安装依赖后即可启动。
 
-**机械臂模型、场景和控制实现保留在本地，通过根目录 `.gitignore` 排除，不随公开仓库分发。**
-
-| 本地私有路径 | 内容 |
+| 路径 | 内容 |
 | --- | --- |
+| `frontend/` | 网页、点选示教、物体与放置点管理、任务编排和执行反馈 |
+| `llm/` | 自训 Transformer、Tokenizer、训练数据、权重和实验记录 |
+| `robot/models/franka_panda/` | Panda URDF、外观与碰撞网格、上游许可证 |
 | `robot/` | 机械臂模型加载、场景、逆运动学、抓取、移动及放置控制 |
 | `backend/simulation.py` | 仿真调度、相机与深度点选、动作执行及物理结果验证 |
-| `launch/demo.py`、`launch/grasp.py` | 私有机械臂演示入口 |
-| `frontend/tools/render_scene.py` | 依赖私有场景与控制器的预览资源生成工具 |
+| `backend/` | SQLite 登记与任务管理、名称匹配、意图解析和 HTTP 接口 |
+| `launch/`、`tests/` | 统一启动入口和回归测试 |
 
-本地虚拟环境、机械臂描述和几何资源、`backend/data/` 中的用户数据库也已忽略。`llm/checkpoints/`、`llm/data/` 和 `llm/experiments/` 保留在公开范围内；这里的语言模型权重与机械臂模型资源不同。
+`.gitignore` 仅排除本地虚拟环境、缓存、环境配置和 `backend/data/` 中的用户数据库及备份。机械臂模型文件、控制程序和语言模型资料均纳入版本管理。首次启动会建立空的登记库，不预填用户物体或任务。
 
-公开仓库可以独立使用小模型推理、训练和评估，也可以浏览前端静态预览。**完整网页仿真、SQLite 登记服务及语言执行目前都依赖私有的 `backend/simulation.py`；仅克隆公开文件无法直接启动 `launch/web.py`。** 本地完整工程仍按下文启动，接入其他执行端所需的接口见“接口说明”。本文文件结构中的私有路径用于说明完整工程，公开检出时不会包含。
+## 安装与启动
 
-`.gitignore` 只阻止未跟踪文件被常规添加，不会移除已经跟踪的文件或历史提交中的内容。
-
-## 网页工作台与坐标试抓
-
-以下命令用于保留上述私有文件、且已安装依赖的本地完整工程。在项目根目录运行，同时启动真实 PyBullet 仿真和网页服务，并自动打开浏览器：
+已验证环境为 Linux、Python 3.12，模型默认使用 CPU。新环境可按以下步骤安装并启动：
 
 ```bash
+git clone https://github.com/liuhansen1/l_arm.git
+cd l_arm
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 .venv/bin/python -B launch/web.py
 ```
+
+以上使用 CPU 版 PyTorch；其他平台可参考 [PyTorch 官方安装说明](https://pytorch.org/get-started/locally/)。`llm/requirements.txt` 保留原训练环境的精确依赖，供重现训练环境使用。安装命令需要联网，不会替换已保存的模型权重或用户登记数据。
+
+如果已有 `.venv_train` 环境，可以直接运行 `.venv_train/bin/python -B launch/web.py`。启动命令会同时初始化仿真、模型和网页服务，并自动打开浏览器。
+
+## 网页工作台与坐标试抓
 
 打开 `http://127.0.0.1:8080`，可点选任意场景位置，编辑坐标，再点击“按坐标试抓”。背景按地面 Z=0 投影，其他表面使用深度坐标；点位可以自行命名保存。坐标显示、保存和执行均保留三位小数。网页用持续相机流显示原生画面、实际 FPS、抓取进度、成功或失败和误差。成功要求实际夹起方块、抬升至少 15 cm 并保持双指接触 3 秒。每次测试后点击“重置场景”再进行下一次。
 
@@ -51,12 +59,14 @@
 ```text
 robot_grasping/
 ├── robot/
+│   ├── models/franka_panda/  # URDF、网格与模型资源许可证
 │   ├── demo.py                # 场景与关节演示实现
 │   ├── grasp.py               # 逆运动学、夹爪控制与物理抓取
-│   ├── spatial_scene.py       # 布局生成和场景快照
-│   └── scene_reasoning.py     # 颜色、空间关系与唯一目标筛选
+│   └── skills.py              # 安全移动、定点放置与方块堆叠
+├── backend/                  # 数据库、语言解析、HTTP 服务与仿真调度
+├── frontend/                 # 网页、相机流、坐标编辑与任务编排
 ├── launch/
-│   ├── web.py                 # 网页与后端统一入口，依赖私有执行模块
+│   ├── web.py                 # 网页与后端统一入口
 │   ├── demo.py                # 启动场景演示
 │   ├── grasp.py               # 启动指定颜色抓取
 │   └── trained_language_grasp.py  # 自训小模型 + 用户登记库的命令行入口
@@ -71,33 +81,33 @@ robot_grasping/
 │   └── requirements.txt       # 自训模型的 PyTorch 依赖
 ├── tests/                     # 无需训练数据的运行回归检查
 ├── requirements.txt           # PyBullet、NumPy 依赖
-├── .venv/                     # 本地机械臂仿真环境
-└── .venv_train/               # 已安装 PyTorch 的小模型推理环境
+├── .venv/                     # 安装时创建，Git 忽略
+└── .venv_train/               # 可选的原训练环境，Git 忽略
 ```
 
-## 本地私有机械臂演示
+## 机械臂演示
 
-以下入口不随公开仓库分发。在本地完整项目目录运行：
+在项目根目录运行：
 
 ```bash
 .venv/bin/python launch/demo.py
 .venv/bin/python launch/grasp.py --color red
 ```
 
-机械臂的逆运动学、碰撞仿真和 URDF 资源由环境中的 PyBullet 提供；`robot/grasp.py` 调用底层逆运动学库。也可使用 `python -m launch.demo` 或 `python -m launch.grasp` 启动。
+机械臂 URDF 和网格位于 [robot/models/franka_panda](robot/models/franka_panda/README.md)，场景程序从仓库内加载模型。逆运动学与碰撞仿真由 PyBullet 提供，`robot/grasp.py` 封装抓取与夹爪控制，`robot/skills.py` 实现移动和放置。也可使用 `python -m launch.demo` 或 `python -m launch.grasp` 启动。
 
 ## 自训小模型
 
-小模型不依赖私有机械臂实现。在已安装 PyTorch 的 Python 环境中可独立解析指令；下面使用本地已有的环境路径，公开检出时请替换为自己的 Python：
+小模型可以独立解析指令，在已安装依赖的环境中运行：
 
 ```bash
-.venv_train/bin/python -B -m llm.model '帮我抓取<OBJ>'
+.venv/bin/python -B -m llm.model '帮我抓取<OBJ>'
 ```
 
-在本地完整工程中，可使用已经通过网页登记的目标名称执行；首次空库时需先在网页添加：
+可使用已经通过网页登记的目标名称执行；首次空库时需先在网页添加：
 
 ```bash
-.venv_train/bin/python -B launch/trained_language_grasp.py \
+.venv/bin/python -B launch/trained_language_grasp.py \
   "帮我抓取零件A" --headless
 ```
 
@@ -213,9 +223,9 @@ Content-Type: application/json
 
 完整字段、放置点和任务请求示例、错误处理及执行结果见 [前后端接口约定](frontend/API.md)。
 
-### 私有执行模块的 Python 接口
+### 执行服务的 Python 接口
 
-若复用现有 [backend/server.py](backend/server.py)、[backend/instructions.py](backend/instructions.py) 和 [backend/store.py](backend/store.py)，需要自行提供 `backend/simulation.py`。该模块当前还被数据库坐标校验引用，因此即使只启动登记接口也需要它。这里说明现有调用约定，不提供机械臂控制实现。
+执行服务已实现在 [backend/simulation.py](backend/simulation.py)，由 HTTP 层、指令解析和数据库坐标校验调用；底层机械臂控制位于 `robot/`。以下调用约定便于理解现有实现和接入其他执行后端。
 
 | 接口 | 调用约定与职责 |
 | --- | --- |
@@ -244,5 +254,5 @@ Content-Type: application/json
 - 成功判据为目标抬升至少 15 cm，并保持双指接触 3 秒；抓取依靠物理接触与摩擦。
 
 ```bash
-.venv_train/bin/python -B -m unittest discover -s tests -v
+.venv/bin/python -B -m unittest discover -s tests -v
 ```

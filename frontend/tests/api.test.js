@@ -54,7 +54,7 @@ test("未知物体、否定、多个目标及额外空间条件不会生成可�
   const api = await fixture();
   await register(api);
   for (const instruction of ["抓取黄色方块", "不要抓取红色方块", "抓取红色方块和杯子", "抓取红色方块左边的方块", "抓取红色方块再放下"]) {
-    const result = await api.parseInstruction(instruction, "qwen");
+    const result = await api.parseInstruction(instruction, "transformer");
     assert.equal(result.status, "unmatched", instruction);
     assert.equal(result.action, undefined);
   }
@@ -268,7 +268,7 @@ test("预览执行明确返回 preview，不伪造机械臂成功或模型置信
   assert.equal(result.status, "preview");
   assert.match(result.message, /没有实际运动/);
   const objects = await api.listObjects();
-  assert.equal(previewParse("抓取红色方块", objects, [], "qwen").source, "preview_rules");
+  assert.equal(previewParse("抓取红色方块", objects, [], "transformer").source, "preview_rules");
 });
 
 test("后端适配器发送真实接口请求并保留错误，不降级为预览", async t => {
