@@ -363,22 +363,3 @@ Content-Type: application/json
 ```bash
 .venv/bin/python -B -m unittest discover -s tests -v
 ```
-
-## 构建 Release
-
-维护者更新 `RELEASE_NOTES.md`，在干净的 Git 工作副本中提交修改、创建版本标签后，可以构建同一标签对应的发布包：
-
-```bash
-git tag -a v1.0.0 -m "l_arm v1.0.0"
-python3 launch/package_release.py --tag v1.0.0
-```
-
-输出位于 `dist/v1.0.0/`，包含 ZIP、tar.gz、逐文件清单和 `SHA256SUMS`。打包程序只读取标签中的已提交文件，并拒绝将数据库、本地虚拟环境或本机配置打包。
-
-推送版本标签会触发仓库的 `Publish Release` 工作流，自动上传附件并发布 GitHub Release：
-
-```bash
-git push --follow-tags origin main
-```
-
-也可在 GitHub Actions 页面手动运行该工作流并填写已存在的版本标签。该流程使用 GitHub 自带的工作流令牌，无需额外配置个人令牌；仓库需要允许 GitHub Actions 运行。
